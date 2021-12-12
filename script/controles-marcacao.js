@@ -13,7 +13,7 @@ const tituloMarcacao = document.getElementById('titulo-da-marcacao');
 const conteudoMarcacao = document.getElementById('conteudo-da-marcacao');
 const corMarcacao = document.getElementById('cor-da-marcacao');
 
-const formatoMarcacao = document.querySelector('[name="formato-da-marcacao"]');
+const formatoMarcacao = document.querySelectorAll('[name="formato-da-marcacao"]');
 
 for (const marcacao of marcacoes) {
   marcacao.addEventListener('click', () => {
@@ -35,3 +35,42 @@ for (const marcacao of marcacoes) {
     document.querySelector(`[name="formato-da-marcacao"][value="${formato}"]`).checked = true;
   })
 }
+
+const handlerStyleChange = (prop, value) => {
+  const marcacaoSelecionada = document.querySelector(".marcacao.selecionada");
+  marcacaoSelecionada.style[prop] = `${value}px`;
+}
+
+xDaMarcacao.onkeyup = ({ target:{ value } }) => handlerStyleChange('left', value);
+xDaMarcacao.onchange = ({ target:{ value } }) => handlerStyleChange('left', value);
+
+yDaMarcacao.onkeyup = ({ target:{ value } }) => handlerStyleChange('top', value);
+yDaMarcacao.onchange = ({ target:{ value } }) => handlerStyleChange('top', value);
+
+larguraMarcacao.onkeyup = ({ target:{ value } }) => handlerStyleChange('width', value);
+larguraMarcacao.onchange = ({ target:{ value } }) => handlerStyleChange('width', value);
+
+alturaMarcacao.onkeyup = ({ target:{ value } }) => handlerStyleChange('height', value);
+alturaMarcacao.onchange = ({ target:{ value } }) => handlerStyleChange('height', value);
+
+const handlerAttributerChange = (attrName, value) => {
+  const marcacaoSelecionada = document.querySelector(".marcacao.selecionada");
+  marcacaoSelecionada.attributes.getNamedItem(attrName).value = value;
+}
+
+tituloMarcacao.onkeyup = ({ target:{ value } }) => handlerAttributerChange('data-titulo', value);
+conteudoMarcacao.onkeyup = ({ target:{ value } }) => handlerAttributerChange('data-conteudo', value);
+corMarcacao.onchange = ({ target:{ value } }) => handlerAttributerChange('data-cor', value);
+
+[...formatoMarcacao].forEach(formatRadio => {
+  formatRadio.onchange = () => {
+    const formatoMarcacao = document.querySelector(`[name="formato-da-marcacao"]:checked`).value;
+
+    const marcacaoSelecionada = document.querySelector(".marcacao.selecionada");
+
+    const newClassList = [...marcacaoSelecionada.classList].filter(classMark => !classMark.startsWith('formato'));
+    newClassList.push(formatoMarcacao);
+
+    marcacaoSelecionada.classList = newClassList.join(' ');
+  }
+});
